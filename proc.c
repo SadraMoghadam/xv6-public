@@ -496,6 +496,58 @@ kill(int pid)
   return -1;
 }
 
+// this function is used to get processes info and is used in system calls(syscall.c)
+// returns the count of processes and puts information of each process in the struct of proc_info using pointers
+// this is the main function that the doc of project wants
+// UNUSED, RUNNABLE and RUNNING are some of the states of a process that are defined
+// NPROC is the number of process that is defined
+int 
+getprocesses_info(void) 
+{ 
+	int count =0; 
+  	struct proc *process; 
+  	struct proc_info *proc_info; 
+  	int pid; 
+  	int proc_info_size = sizeof(struct proc_info)
+  	// gets the max(last) Process ID (argint is built-in function)
+  	argint(0, &pid); 
+  	// fetches the struct proc_info pointer received by the second function argument using argptr (argptr is built-in function)
+  	argptr(1, (char**)&proc_info, pid * proc_info_size); 
+  	// here sets the information of process id(pid) and size(sz) of each process and goes to the next one
+  	for(process = ptable.proc; process < &ptable.proc[NPROC]; process++)
+	{ 
+    	if(process->state != UNUSED) 
+    	{
+    		if(process->state == RUNNING || process->state == RUNNABLE)
+			{	
+      			proc_info[count].memsize = process->sz;
+      			proc_info[count].pid = process->pid;
+    	  		count ++; 
+    		}
+		}
+    	
+  	} 
+  	//this is for sorting the processes in ascending order according to the memory usage of each process as the doc said
+  	for (int i = 0; i < NPROC; i++) 
+  	{ 
+    	for (int j = i+1; j < NPROC; j++) 
+    	{ 
+    		struct proc_info p_info;
+      		if (proc_info[i].memsize < proc_info[j].memsize) 
+      		{ 
+        		proc_info[i].memsize = proc_info[j].memsize;
+        		proc_info[i].pid = proc_info[j].pid;
+        		p_info = proc_info[i];
+        		p_info.memsize = proc_info[i].memsize;
+        		p_info.pid = proc_info[i].pid;
+        		proc_info[j].memsize = p_info.memsize;
+        		proc_info[j].pid = p_info.pid;
+      		} 
+    	} 
+  	}
+  	return count; 
+} 
+
 //PAGEBREAK: 36
 // Print a process listing to console.  For debugging.
 // Runs when user types ^P on console.

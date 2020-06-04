@@ -103,8 +103,11 @@ extern int sys_unlink(void);
 extern int sys_wait(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
+//here we add a system call to get processes info
+extern int sys_getprocesses_info(void);
 
 static int (*syscalls[])(void) = {
+[SYS_getprocesses_info] sys_getprocesses_info,
 [SYS_fork]    sys_fork,
 [SYS_exit]    sys_exit,
 [SYS_wait]    sys_wait,

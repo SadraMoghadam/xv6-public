@@ -508,11 +508,11 @@ getprocesses_info(void)
   	struct proc *process; 
   	struct proc_info *proc_info; 
   	int pid; 
-  	int proc_info_size = sizeof(struct proc_info)
+  	//int proc_info_size = sizeof(struct proc_info);
   	// gets the max(last) Process ID (argint is built-in function)
   	argint(0, &pid); 
   	// fetches the struct proc_info pointer received by the second function argument using argptr (argptr is built-in function)
-  	argptr(1, (char**)&proc_info, pid * proc_info_size); 
+  	argptr(1, (char**)&proc_info, pid * sizeof(struct proc_info)); 
   	// here sets the information of process id(pid) and size(sz) of each process and goes to the next one
   	for(process = ptable.proc; process < &ptable.proc[NPROC]; process++)
 	{ 

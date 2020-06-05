@@ -89,3 +89,10 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+//this code is for defining system call from proc.c function
+int
+sys_getprocesses_info(void)
+{ 
+  	return getprocesses_info(); 
+} 

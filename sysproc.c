@@ -89,3 +89,15 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+
+// this function is to get arguments from user mode
+int
+sys_waitx(void)
+{
+  int *wtime;
+  int *rtime;
+  if((argptr(0, (char **)&wtime, sizeof(int)) < 0) || (argptr(1, (char **)&rtime, sizeof(int)) < 0))
+    return -1;
+  return waitx(wtime, rtime);    
+}

@@ -264,7 +264,8 @@ exit(void)
         wakeup1(initproc);
     }
   }
-
+  // this is to save the time that the process is finished
+  curproc->etime = ticks;
   // Jump into the scheduler, never to return.
   curproc->state = ZOMBIE;
   sched();

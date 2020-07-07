@@ -111,7 +111,11 @@ found:
   p->context = (struct context*)sp;
   memset(p->context, 0, sizeof *p->context);
   p->context->eip = (uint)forkret;
-
+  //init parameters in doc
+  p->stime = ticks;
+  p->etime = 0;
+  p->rtime = 0;
+  p->iotime = 0;
   return p;
 }
 
@@ -531,4 +535,51 @@ procdump(void)
     }
     cprintf("\n");
   }
+}
+
+//waitx systemcall function
+// it is like wait function with 
+int
+waitx(int *wtime, int *rtime)
+{
+  struct proc *process;
+  int havekids, pid;
+  struct  proc *curproc = myproc();
+  acquire(&ptable.lock);
+  while (1 == 1)
+  {
+    // check if system has child process
+    havekids = 0;
+    for (process=ptable.proc; process < &ptable.proc[NPROC]; process++)
+    {
+      if(process->parent != curproc)
+        continue;
+      havekids = 1;
+      if (process->state == ZOMBIE)
+      {
+        pid = process->pid;
+        // these two lines are the difference between wait and waitx
+        *rtime = process->rtime;
+        *wtime = process->etime - process->stime - process->rtime - process->iotime;
+        kfree(process->kstack);
+        process->kstack = 0;
+        freevm(process->pgdir);
+        process->state = UNUSED;
+        process->pid = 0;
+        process->parent = 0;
+        process->name[0] = 0;
+        process->killed = 0;
+        release(&ptable.lock);
+        return pid;
+      }  
+    }
+    // if we dont have children
+    if (havekids == 0 || curproc->killed == 1){
+      release(&ptable.lock);
+      return -1;
+    }
+    // if we have children, then wait(sleep)
+    sleep(curproc, &ptable.lock);
+  }
+
 }

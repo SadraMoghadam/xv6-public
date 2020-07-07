@@ -537,8 +537,10 @@ procdump(void)
   }
 }
 
-//waitx systemcall function
+// waitx systemcall function
 // it is like wait function with 
+// wtime: wait time
+// rtime: run time
 int
 waitx(int *wtime, int *rtime)
 {

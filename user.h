@@ -23,6 +23,8 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
+// waitx function here is defined in user mode
+int waitx(int*, int*);
 
 // ulib.c
 int stat(const char*, struct stat*);

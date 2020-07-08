@@ -16,13 +16,14 @@ int main(int argc, char *argv[])
     pid = fork();
     if (pid > 0)
     {
-        timeDelay(2000);
+
+        timeDelay(20000);
         chpid = waitx(&wtime, &rtime);
         printf(1, "----------------------------------------");
         printf(1, "\n\tchild pid: %d", chpid);
         printf(1, "\n\tParent wait time: %d", wtime);
         printf(1, "\n\tParent run time: %d", rtime);
-        printf(1, "----------------------------------------");
+        printf(1, "\n----------------------------------------");
     }
     if (pid == 0)
     {

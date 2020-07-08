@@ -349,7 +349,7 @@ scheduler(void)
       new_p = p;
       for (temp = ptable.proc; temp < &ptable.proc[NPROC]; temp++)
       {
-        if(HP->priority > temp->priority && temp->state == RUNNABLE)
+        if(new_p->priority > temp->priority && temp->state == RUNNABLE)
           new_p = temp;  
       }
       // set highest priority for process to run

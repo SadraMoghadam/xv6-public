@@ -102,6 +102,8 @@ sys_waitx(void)
   return waitx(wtime, rtime);    
 }
 
+
+// this function is to set priority in user mode
 int
 sys_set_priority(void)
 {
@@ -110,5 +112,5 @@ sys_set_priority(void)
   if(argint(0, &pid) < 0 || argint(1,&priority) < 0))
     return -1;
 
-  return set_priority(pid, value);    
+  return set_priority(pid, priority);    
 } 

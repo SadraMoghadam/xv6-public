@@ -25,6 +25,8 @@ int sleep(int);
 int uptime(void);
 // waitx function here is defined in user mode
 int waitx(int*, int*);
+// set_priority function here is defined in user mode
+int set_priority(int, int);
 
 // ulib.c
 int stat(const char*, struct stat*);

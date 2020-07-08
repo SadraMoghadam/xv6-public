@@ -104,6 +104,7 @@ extern int sys_wait(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
 extern int sys_waitx(void);
+extern int sys_set_priority(void);
 
 //added waitx systemcall here
 static int (*syscalls[])(void) = {

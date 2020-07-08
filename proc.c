@@ -116,6 +116,8 @@ found:
   p->etime = 0;
   p->rtime = 0;
   p->iotime = 0;
+  // defaul priority is 60 as doc said
+  p->priority = 60;
   return p;
 }
 
@@ -328,6 +330,9 @@ void
 scheduler(void)
 {
   struct proc *p;
+  // new_p has higher priority than p
+  struct proc *temp, *new_p;
+  
   struct cpu *c = mycpu();
   c->proc = 0;
   
@@ -340,7 +345,15 @@ scheduler(void)
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->state != RUNNABLE)
         continue;
-
+      //priority scheduling
+      new_p = p;
+      for (temp = ptable.proc; temp < &ptable.proc[NPROC]; temp++)
+      {
+        if(HP->priority > temp->priority && temp->state == RUNNABLE)
+          new_p = temp;  
+      }
+      // set highest priority for process to run
+      p = new_p; 
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
@@ -585,4 +598,23 @@ waitx(int *wtime, int *rtime)
     sleep(curproc, &ptable.lock);
   }
 
+}
+
+//this is the function to set and change priority
+int
+set_priority(int pid, int priority){
+  struct proc *p;
+  int temp = -1;
+  acquire(&ptable.lock);
+  for (p  = ptable.proc; p < &ptable.proc[NPROC]; p++)
+  {
+    if (p->pid == pid)
+    {
+      temp = p->priority;
+      p->priority = priority;
+      break;
+    }
+  }
+  release(&ptable.lock);
+  return temp;
 }
